@@ -2,7 +2,7 @@ import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export const api = axios.create({
-    baseURL:"http://localhost:9192"
+    baseURL:"http://localhost:9191"
 })
 
 export async function addRoom(photo, roomType, roomPrice) {
@@ -11,7 +11,7 @@ export async function addRoom(photo, roomType, roomPrice) {
     formData.append("roomType", roomType);
     formData.append("roomPrice", roomPrice);
 
-    const response = await api.post("/rooms/addnew-room", formData);
+    const response = await api.post("/rooms/add/new-room", formData);
     if (response.status === 201) {
         return true;
     } else {
@@ -23,12 +23,24 @@ export async function addRoom(photo, roomType, roomPrice) {
 export async function getRoomTypes() {
 
     try {
-        const response = await api.get("/rooms/room-types");
+        const response = await api.get("/rooms/room/types");
         return response.data
         
     } catch (error) {
         throw new Error("Error fetching room types");
         
     }
+
+ 
     
 }
+
+export async function getAllRooms() {
+  try {
+    const result = await api.get("/rooms/all");
+    return result.data;
+  } catch (error) {
+    throw new Error("Error fetching rooms");
+  }
+}
+
