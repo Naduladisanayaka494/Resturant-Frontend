@@ -1,4 +1,5 @@
 import React from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const RoomPaginator = ({ currentPage, totalPages, onPageChange }) => {
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
