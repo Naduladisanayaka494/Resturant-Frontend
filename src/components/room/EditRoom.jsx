@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { addRoom } from "../utill/ApiFunctions";
+// EditRoom.js
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getRoomById, updateRoom } from "../utill/ApiFunctions";
 import RoomTypeSelector from "../common/RoomTypeSelector";
+
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-
-const AddRoom = () => {
-  const [newRoom, setNewRoom] = useState({
+const EditRoom = () => {
+  const [room, setRoom] = useState({
     photo: null,
     roomType: "",
     roomPrice: "",
@@ -13,6 +15,19 @@ const AddRoom = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
+  const { roomId } = useParams();
+
+  const handleImageChange = (e) => {
+    const selectedImage = e.target.files[0];
+    if (selectedImage) {
+      setRoom({ ...room, photo: selectedImage });
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(selectedImage);
+    }
+  };
 
   const handleRoomInputChange = (e) => {
     const name = e.target.name;
@@ -24,44 +39,51 @@ const AddRoom = () => {
         value = "";
       }
     }
-    setNewRoom({ ...newRoom, [name]: value });
+    setRoom({ ...room, [name]: value });
   };
 
-  const handleImageChange = (e) => {
-    const selectedImage = e.target.files[0];
-    setNewRoom({ ...newRoom, photo: selectedImage });
-    setImagePreview(URL.createObjectURL(selectedImage));
-  };
+  useEffect(() => {
+    const fetchRoom = async () => {
+      try {
+        const roomData = await getRoomById(roomId);
+        setRoom(roomData);
+        if (roomData.photo) {
+          setImagePreview(`data:image/jpeg;base64,${roomData.photo}`);
+        } else {
+          setErrorMessage("No photo available for this room.");
+        }
+      } catch (error) {
+        setErrorMessage("Error fetching room data.");
+        console.log(error);
+      }
+    };
+    fetchRoom();
+  }, [roomId]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const success = await addRoom(
-        newRoom.photo,
-        newRoom.roomType,
-        newRoom.roomPrice
-      );
-      if (success !== undefined) {
-        setSuccessMessage("A new room was added to the database!");
-        setNewRoom({ photo: null, roomType: "", roomPrice: "" });
+      const response = await updateRoom(roomId, room);
+      if (response.status === 200) {
+        const updatedRoomData = await getRoomById(roomId);
+        setRoom(updatedRoomData);
+        setImagePreview(`data:image/jpeg;base64,${updatedRoomData.photo}`);
+        setSuccessMessage("Room updated successfully.");
         setErrorMessage("");
       } else {
-        setErrorMessage("Error adding room");
+        setErrorMessage("Error updating room.");
       }
     } catch (error) {
-      setErrorMessage(error.message);
+      setErrorMessage("Error updating room.");
+      console.log(error);
     }
-    setTimeout(() => {
-      setSuccessMessage("");
-      setErrorMessage("");
-    }, 3000);
   };
 
   return (
     <section className="container mt-5 mb-5">
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-6">
-          <h2 className="mt-5 mb-4 text-center">Add a New Room</h2>
+          <h2 className="mt-5 mb-4 text-center">Edit Room</h2>
 
           {successMessage && (
             <div className="alert alert-success">{successMessage}</div>
@@ -72,35 +94,31 @@ const AddRoom = () => {
           )}
 
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
+            <div className="form-group">
               <RoomTypeSelector
                 handleRoomInputChange={handleRoomInputChange}
-                newRoom={newRoom}
+                newRoom={room}
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="roomPrice" className="form-label">
-                Room Price
-              </label>
+            <div className="form-group">
+              <label htmlFor="roomPrice">Room Price</label>
               <input
                 className="form-control"
                 required
                 id="roomPrice"
                 name="roomPrice"
                 type="number"
-                value={newRoom.roomPrice}
+                value={room.roomPrice}
                 onChange={handleRoomInputChange}
               />
             </div>
-            <div className="mb-3">
-              <label htmlFor="photo" className="form-label">
-                Room Photo
-              </label>
+            <div className="form-group">
+              <label htmlFor="photo">Room Photo</label>
               <input
                 id="photo"
                 name="photo"
                 type="file"
-                className="form-control"
+                className="form-control-file"
                 onChange={handleImageChange}
               />
               {imagePreview && (
@@ -111,12 +129,13 @@ const AddRoom = () => {
                 />
               )}
             </div>
-            <div className="d-grid gap-2">
+            <div className="d-grid mt-4">
               <Link to={"/exsisting-rooms"} className="btn btn-primary">
                 Back
               </Link>
+              <br></br>
               <button className="btn btn-primary" type="submit">
-                Save Room
+                Edit Room
               </button>
             </div>
           </form>
@@ -126,4 +145,4 @@ const AddRoom = () => {
   );
 };
 
-export default AddRoom;
+export default EditRoom;
