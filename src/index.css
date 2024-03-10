@@ -92,7 +92,7 @@ body {
 
 
 .parallax {
-  background-image: url("./assets/images/parrall.jpg");
+  background-image: url("./assets/images/hotel1.jpg");
   background-attachment: fixed;
   background-position: center;
   background-repeat: no-repeat;
@@ -104,7 +104,7 @@ body {
   position: relative;
   height: 150px;
   background-size: cover;
-  background-image: url("./assets/images/services4.jpg");
+  background-image: url("./assets/images/hotel2.jpg");
   background-position: center center;
 }
 
@@ -211,7 +211,7 @@ h2 {
 
 /* The header banner */
 .header-banner {
-  background-image: url("./assets/images/services-1.jpg");
+  background-image: url("./assets/images/hotel3.jpeg");
   background-size: cover;
   background-position: center;
   position: relative;

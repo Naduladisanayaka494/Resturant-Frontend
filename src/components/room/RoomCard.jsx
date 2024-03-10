@@ -1,6 +1,7 @@
 import React from "react";
 import { Col, Card } from "react-bootstrap";
 import { Link, NavLink } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const RoomCard = ({ room }) => {
   return (
@@ -18,13 +19,18 @@ const RoomCard = ({ room }) => {
           <div className="flex-grow-1 ml-3 px-5">
             <Card.Title className="hotel-color">{room.roomType}</Card.Title>
             <Card.Title className="room-price">{room.roomPrice}</Card.Title>
-            <Card.Text>Some Room information goes here for the guest to read through</Card.Text>
-           
-                  </div>
-                  <div className="flex-shrint-0 mt-3">
-                      <Link to={`bookings/${room.id}`}></Link>
-                      
-                  </div>
+            <Card.Text>
+              Some Room information goes here for the guest to read through
+            </Card.Text>
+          </div>
+          <div className="flex-shrink-0 mt-3">
+            <Link
+              to={`bookings/${room.id}`}
+              className="btn btn-hotel btn-sm btn-primary"
+            >
+              Book Now
+            </Link>
+          </div>
         </Card.Body>
       </Card>
     </Col>
