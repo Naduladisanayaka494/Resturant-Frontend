@@ -10,6 +10,6 @@ const bookingSuccess = () => {
         <Header title="Booking Success/"></Header>
       </div>
   )
-}
+}l
 
 export default bookingSuccess
