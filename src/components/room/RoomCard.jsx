@@ -9,12 +9,17 @@ const RoomCard = ({ room }) => {
       <Card>
         <Card.Body className="d-flex flex-wrap align-items-center">
           <div className="flex-shrin-0 mr-3 mb-3 mb-md-0">
-            <Card.Img
-              variant="top"
-              src={"data:image/png;base64," + room.photo}
-              alt="Room Photo"
-              style={{ width: "100%", maxWidth: 200, height: "auto" }}
-            />
+            <Link
+              to={`/book-room/${room.id}`}
+              className="btn btn-hotel btn-sm btn-primary"
+            >
+              <Card.Img
+                variant="top"
+                src={"data:image/png;base64," + room.photo}
+                alt="Room Photo"
+                style={{ width: "100%", maxWidth: 200, height: "auto" }}
+              />
+            </Link>
           </div>
           <div className="flex-grow-1 ml-3 px-5">
             <Card.Title className="hotel-color">{room.roomType}</Card.Title>
@@ -25,7 +30,7 @@ const RoomCard = ({ room }) => {
           </div>
           <div className="flex-shrink-0 mt-3">
             <Link
-              to={`bookings/${room.id}`}
+              to={`/book-room/${room.id}`}
               className="btn btn-hotel btn-sm btn-primary"
             >
               Book Now

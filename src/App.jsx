@@ -12,6 +12,9 @@ import NavBar from './components/layout/NavBar'
 import Footer from './components/layout/Footer'
 import RoomListing from './components/room/RoomListing'
 import Admin from './components/admin/Admin'
+import CheckOut from './components/bookings/CheckOut'
+import BookingSuccess from './components/bookings/bookingSuccess'
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -25,8 +28,10 @@ function App() {
             <Route path="/edit-room/:roomId" element={<EditRoom />}></Route>
             <Route path="/exsisting-rooms" element={<ExsistingRooms />}></Route>
             <Route path="/add-room" element={<AddRoom />}></Route>
+            <Route path="/book-room/:roomId" element={<CheckOut />}></Route>
             <Route path="/browse-all-rooms" element={<RoomListing />}></Route>
             <Route path="/admin" element={<Admin />}></Route>
+            <Route path="/booking-success" element={<BookingSuccess />}></Route>
           </Routes>
         </Router>
         <Footer />
